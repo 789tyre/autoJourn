@@ -6,15 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author 789tyre (Gavin)
@@ -26,6 +26,7 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        newEntry();
     }
 
     /**
@@ -39,42 +40,50 @@ public class Main extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         entry = new javax.swing.JTextArea();
-        save = new javax.swing.JButton();
-        signIn = new javax.swing.JToggleButton();
-        newEntry = new javax.swing.JButton();
+        saveB = new javax.swing.JButton();
+        signInB = new javax.swing.JToggleButton();
+        newEntryB = new javax.swing.JButton();
+        fileName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         entry.setColumns(20);
+        entry.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         entry.setLineWrap(true);
         entry.setRows(5);
         entry.setTabSize(4);
         entry.setWrapStyleWord(true);
         jScrollPane1.setViewportView(entry);
 
-        save.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        save.setText("Save");
-        save.addActionListener(new java.awt.event.ActionListener() {
+        saveB.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        saveB.setText("Save");
+        saveB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveActionPerformed(evt);
+                saveBActionPerformed(evt);
             }
         });
 
-        signIn.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        signIn.setText("Sign In");
-        signIn.addActionListener(new java.awt.event.ActionListener() {
+        signInB.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        signInB.setText("Sign In");
+        signInB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                signInActionPerformed(evt);
+                signInBActionPerformed(evt);
             }
         });
 
-        newEntry.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
-        newEntry.setText("New");
-        newEntry.addActionListener(new java.awt.event.ActionListener() {
+        newEntryB.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        newEntryB.setText("New");
+        newEntryB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                newEntryActionPerformed(evt);
+                newEntryBActionPerformed(evt);
             }
         });
+
+        fileName.setFont(new java.awt.Font("Monospaced", 0, 20)); // NOI18N
+        fileName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        fileName.setText("Name of File here.md");
+        fileName.setFocusable(false);
+        fileName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,69 +91,88 @@ public class Main extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(signIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(save, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                    .addComponent(newEntry, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(fileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(signInB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(newEntryB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(saveB, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {newEntry, save, signIn});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {newEntryB, saveB});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(newEntry)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(save))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(signIn)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(fileName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(signInB)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(newEntryB)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(saveB))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void signInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_signInActionPerformed
-
-    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        // TODO add your handling code here:
-        Path path = Paths.get("entries/Entry.txt") ;
     
-        try{
-            Files.createFile(path);
+    
+    private void saveBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBActionPerformed
+        //Spits out a brand new file name for each entry
+        //String pathName = "entries/" + fileName.getText();
+
+        Path path = Paths.get("entries/" + fileName.getText()); //Creates a path variable where we can save the md file
+
+        try {
+            Files.createFile(path); // checks if the file exists and creates it if not there
+            saveFile(path);
         } catch (FileAlreadyExistsException x) {
-            
+
             try {
-                saveFile(path);
+                saveFile(path); // Saves the text in the entry box
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
         } catch (IOException x) {
             System.err.format("createFile Error: %s%n", x);
         }
-    }//GEN-LAST:event_saveActionPerformed
+    }//GEN-LAST:event_saveBActionPerformed
 
     private void saveFile(Path path) throws IOException {
-        List<String> text = Arrays.asList( entry.getText().split("\\n") );
-        //System.out.println(text);
-        Files.write(path, text, Charset.forName("UTF-8") );
+        //Will eventually save to Google Drive when there is internet.
+        List<String> text = Arrays.asList(entry.getText().split("\\n"));
+        Files.write(path, text, Charset.forName("UTF-8"));
     }
-    
-    private void newEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryActionPerformed
-        entry.setText( "" );
-    }//GEN-LAST:event_newEntryActionPerformed
+
+    private void newEntryBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newEntryBActionPerformed
+        newEntry();
+    }//GEN-LAST:event_newEntryBActionPerformed
+
+    private void signInBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_signInBActionPerformed
+
+    private void newEntry() {
+        //Puts the date into the first line of the entry box
+        Date date = new Date();
+        DateFormat dateformatFile = new SimpleDateFormat("yyyMMdd - HHmm");
+        DateFormat dateformatEntry = new SimpleDateFormat("##*HH:mm @ dd/MM/yyyy*");
+        
+        fileName.setText( dateformatFile.format(date) + ".md" ); //Used for saving the entry
+        entry.setText(dateformatEntry.format(date)); //Used to put in the actual entry
+    }
 
     /**
      * @param args the command line arguments
@@ -174,18 +202,17 @@ public class Main extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Main().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Main().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea entry;
+    private javax.swing.JLabel fileName;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton newEntry;
-    private javax.swing.JButton save;
-    private javax.swing.JToggleButton signIn;
+    private javax.swing.JButton newEntryB;
+    private javax.swing.JButton saveB;
+    private javax.swing.JToggleButton signInB;
     // End of variables declaration//GEN-END:variables
 }
