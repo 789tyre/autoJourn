@@ -3,12 +3,14 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JFileChooser;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -44,6 +46,7 @@ public class Main extends javax.swing.JFrame {
         signInB = new javax.swing.JToggleButton();
         newEntryB = new javax.swing.JButton();
         fileName = new javax.swing.JLabel();
+        loadB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,6 +88,14 @@ public class Main extends javax.swing.JFrame {
         fileName.setFocusable(false);
         fileName.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        loadB.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        loadB.setText("Load");
+        loadB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadBActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -94,14 +105,15 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fileName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(signInB)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(signInB)
+                            .addComponent(loadB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(newEntryB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(saveB, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(saveB, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -113,14 +125,16 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(fileName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(signInB)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(newEntryB)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(saveB))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(signInB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(loadB))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(newEntryB)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(saveB))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 674, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -164,6 +178,50 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_signInBActionPerformed
 
+    private void loadBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new File("entries"));
+        if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fc.getSelectedFile();
+            loadFile(selectedFile.getName());
+        }
+        //loadFile("entry.md");
+    }//GEN-LAST:event_loadBActionPerformed
+    
+    private void loadFile(String file){
+        FileReader fr = null;
+        BufferedReader br = null;
+        List<String> text = new ArrayList<>();
+        String entryTemp;
+        
+        try{
+            fr = new FileReader("entries/" + file); //Navigates to the right directory (I plan on using only one)
+            //fr = new FileReader(file);
+            br  = new BufferedReader(fr);
+            String currentLine = null;
+            
+            while ( (currentLine = br.readLine()) != null ){
+                text.add(currentLine);
+            }
+            
+        } catch (IOException e) {
+            System.err.format("Error: %s%n", e);
+            
+        } finally {
+            try{
+                if (fr != null) {fr.close();}
+                if (br != null) {br.close();}
+            } catch (IOException e) {
+                System.err.format("Error: %s%n", e);
+            }
+        }
+        
+        entryTemp = String.join("\n", text);
+        fileName.setText(file);
+        entry.setText(entryTemp);
+    }
+    
     private void newEntry() {
         //Puts the date into the first line of the entry box
         Date date = new Date();
@@ -211,6 +269,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextArea entry;
     private javax.swing.JLabel fileName;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton loadB;
     private javax.swing.JButton newEntryB;
     private javax.swing.JButton saveB;
     private javax.swing.JToggleButton signInB;
