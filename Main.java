@@ -148,6 +148,7 @@ public class Main extends javax.swing.JFrame {
         //String pathName = "entries/" + fileName.getText();
 
         Path path = Paths.get("entries/" + fileName.getText()); //Creates a path variable where we can save the md file
+	Path folder = Paths.get("entries/");
 
         try {
             Files.createFile(path); // checks if the file exists and creates it if not there
@@ -159,9 +160,22 @@ public class Main extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException x) {
+
+        } catch (NoSuchFileException x) {
+
+	    System.out.println("Cannot find the 'entries' folder. Creating one here");
+	    //Create the entries folder then try to save the file again
+	    try {
+		Files.createDirectories(folder);
+		saveFile(path);
+	    } catch (IOException ex) {
+		System.err.format("IOException %s%n", ex);
+	    }
+
+	} catch (IOException x) {
             System.err.format("createFile Error: %s%n", x);
-        }
+        } 	
+
     }//GEN-LAST:event_saveBActionPerformed
 
     private void saveFile(Path path) throws IOException {
@@ -226,7 +240,7 @@ public class Main extends javax.swing.JFrame {
         //Puts the date into the first line of the entry box
         Date date = new Date();
         DateFormat dateformatFile = new SimpleDateFormat("yyyMMdd - HHmm");
-        DateFormat dateformatEntry = new SimpleDateFormat("##*HH:mm @ dd/MM/yyyy*");
+        DateFormat dateformatEntry = new SimpleDateFormat("## *HH:mm @ dd/MM/yyyy*");
         
         fileName.setText( dateformatFile.format(date) + ".md" ); //Used for saving the entry
         entry.setText(dateformatEntry.format(date)); //Used to put in the actual entry
